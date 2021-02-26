@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import chromedriver_autoinstaller
 import time
+import threading
 
 from ttk import *
 from tkinter import *
@@ -165,8 +166,7 @@ class StrikeYewonArtsModel:
         )
 
         self.submitLectureRequest(self.lecture_name)
-
-        time.sleep(4)
+        time.sleep(0.5)
         self.driver.quit()
 
 class LoginGUI:
@@ -212,9 +212,6 @@ class LoginGUI:
 
         root.mainloop()
 
-''' global variable '''
-input_id = ""
-input_pw = ""
 
 class LectureManagementGUI():
     def __init__(self):
@@ -290,7 +287,13 @@ class LectureManagementGUI():
         '''      '''
 
         ''' 추가 버튼 '''
-        add_btn = Button(root, text="추가!", width=8)
+        def add_to_listbox():
+            all_combo_info = [curri_code_combo.get(), younggb_combo.get(), grade_combo.get(), juya_combo.get(), hakbu_code_combo.get(), gwa_entry.get(), lecture_entry.get()]
+            listbox.insert("end", all_combo_info)
+            lecture_info_list.append(all_combo_info)
+            print(lecture_info_list)
+            print(len(lecture_info_list))
+        add_btn = Button(root, command=add_to_listbox, text="추가!", width=8)
         add_btn.grid(row=1, column=7)
         '''           '''
 
@@ -300,31 +303,43 @@ class LectureManagementGUI():
         ex_lbl.grid(row=2, column=1, columnspan=5, sticky="nsew", pady=10)
         listbox = tkinter.Listbox(root, selectmode='extended', height=0, width=50)
         listbox.insert("end", ['교양', '2영역', '1학년', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상'])
-        listbox.insert("end", ['교양', '2영역', '1학년', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상'])
-        listbox.insert("end", ['교양', '2영역', '1학년', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상'])
 
         listbox.grid(row=3, column=1, columnspan=5, sticky="nsew", padx=10)
         '''          '''
-        # print(listbox.get(1)[0])
+
         ''' Fight 버튼 '''
-        fight_btn = Button(root, text="FIGHT!")
+        def fight_():
+            root.destroy()
+        fight_btn = Button(root, command=fight_, text="FIGHT!")
         fight_btn.grid(row=3, column=6, sticky="nsew")
 
         ''' Delete 버튼 '''
-        delete_btn = Button(root, text="DELETE", height=6)
+        def delete_list():
+            listbox.delete("end")
+            lecture_info_list.pop()
+        delete_btn = Button(root, command=delete_list, text="DELETE", height=6)
         delete_btn.grid(row=3, column=7)
-        
-
+    
         root.mainloop()
 
 
+''' global variable '''
+input_id = ""
+input_pw = ""
+lecture_info_list = []
 
 if __name__ == "__main__":
-    # login_gui = LoginGUI() # 20180157 !000129
-    # print("ID :", input_id)
-    # print("PW :", input_pw)
+    login_gui = LoginGUI() # 20180157 !000129
+    print("ID :", input_id)
+    print("PW :", input_pw)
     
-    # Model(self, curri_code_key, younggb_key, grade_key, juya_key, hakbu_code_key, gwa_key, lecture_name, id, pw)
-    # model = StrikeYewonArtsModel('교양', '2', '1', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상', input_id, input_pw)
-    # model.run()
     lecture_gui = LectureManagementGUI()
+    for i in range(len(lecture_info_list)):
+        print(lecture_info_list[i][1])
+        model = StrikeYewonArtsModel(lecture_info_list[i][0], lecture_info_list[i][1], lecture_info_list[i][2], lecture_info_list[i][3], lecture_info_list[i][4], lecture_info_list[i][5], lecture_info_list[i][6], input_id, input_pw)
+        model.run()
+
+    # Model(self, curri_code_key, younggb_key, grade_key, juya_key, hakbu_code_key, gwa_key, lecture_name, id, pw)
+    # model = StrikeYewonArtsModel('교양', '2영역', '1학년', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상', input_id, input_pw)
+    # model.run()
+    
