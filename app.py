@@ -1,12 +1,12 @@
+#-*- coding:utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import chromedriver_autoinstaller
 import time
-import threading
-
-from ttk import *
 from tkinter import *
 import tkinter.messagebox
+from ttk import Combobox
+import os, sys
 
 class StrikeYewonArtsModel:
     def __init__(self, curri_code_key, younggb_key, grade_key, juya_key, hakbu_code_key, gwa_key, lecture_name, id, pw):
@@ -172,7 +172,7 @@ class StrikeYewonArtsModel:
 class LoginGUI:
     def __init__(self):
         def submit():
-            _id = str(id_entry.get())
+            _id = str(id_entry.get())  
             _pw = str(pw_entry.get())
             if (_id == "") or (_pw == ""):
                 tkinter.messagebox.showwarning("경고는 월닝", "학번 또는 암호가 입력되지 않았습니다.")
@@ -233,7 +233,7 @@ class LectureManagementGUI():
         younggb_lbl = Label(root, text="영역 : ")
         younggb_lbl.grid(row=0, column=2)
 
-        choices2 = ['1영역', '2영역', '3영역']
+        choices2 = ['1영역', '2영역', '3영역', '4영역', '5영역', '6영역', '7영역', '8영역']
         
         younggb_combo = Combobox(root, values = choices2, width=10)
         younggb_combo.grid(row=0, column=3)
@@ -263,7 +263,7 @@ class LectureManagementGUI():
         hakbu_code_lbl = Label(root, text="학부 : ")
         hakbu_code_lbl.grid(row=1, column=0)
 
-        choices5 = ['교양학부', '컴퓨터융합학부']
+        choices5 = ['문화재보존예술학과', '문화예술관광콘텐츠학과', '미술/디자인학부', '만화/게임영상학부', '음악학과', '무용학과1', '교양학부', '공연ㆍ음악학부', '스포츠레저복지학부', '미술조형학과', '애니메이션학과', '미디어예술학과', '시각디자인학과', '경호무도학과', '문화재/보존학과', '글로벌호텔관광경영학과', '호텔관광경영학과', '문화재/관광학부', '스포츠학과', '음악학과', '한지조형디자인학과', '스포츠복지학부', '귀금속보석디자인학과', '만화게임영상학과', '연극영화ㆍ코미디학과', '실용음악학과', '뮤지컬학과', '생활체육학과', '무용학과', '뷰티패션디자인학과', '연극영화학과', '한지공간조형디자인학과', '금속조형디자인학과', '공연예술뮤지컬학과', '미술조형디자인학부', '미술조형디자인학부', '디지털콘텐츠학부', '디지털콘텐츠학부', '공연예술학부', '공연예술학부', '스포츠경호무도학과']
 
         hakbu_code_combo = Combobox(root, values=choices5, width=10)
         hakbu_code_combo.grid(row=1, column=1, pady=10)
@@ -302,8 +302,6 @@ class LectureManagementGUI():
         ex_lbl = Label(root, text="신청목록(구분 / 영역 / 학년 / 주야 / 학부 / 전공 / 강의명)")
         ex_lbl.grid(row=2, column=1, columnspan=5, sticky="nsew", pady=10)
         listbox = tkinter.Listbox(root, selectmode='extended', height=0, width=50)
-        listbox.insert("end", ['교양', '2영역', '1학년', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상'])
-
         listbox.grid(row=3, column=1, columnspan=5, sticky="nsew", padx=10)
         '''          '''
 
@@ -334,12 +332,8 @@ if __name__ == "__main__":
     print("PW :", input_pw)
     
     lecture_gui = LectureManagementGUI()
+
     for i in range(len(lecture_info_list)):
         print(lecture_info_list[i][1])
         model = StrikeYewonArtsModel(lecture_info_list[i][0], lecture_info_list[i][1], lecture_info_list[i][2], lecture_info_list[i][3], lecture_info_list[i][4], lecture_info_list[i][5], lecture_info_list[i][6], input_id, input_pw)
         model.run()
-
-    # Model(self, curri_code_key, younggb_key, grade_key, juya_key, hakbu_code_key, gwa_key, lecture_name, id, pw)
-    # model = StrikeYewonArtsModel('교양', '2영역', '1학년', '주간', '교양학부', '교양학부', '동양미술사의 이해와 감상', input_id, input_pw)
-    # model.run()
-    
